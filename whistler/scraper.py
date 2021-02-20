@@ -12,7 +12,6 @@ WHISTLER_AVAILABILITY_PAGE = "https://www.whistlerblackcomb.com/plan-your-trip/l
 class WhistlerScraper(object):
     def __init__(self, headless=True):
         self.driver = make_driver(headless)
-
         self.driver.maximize_window()
         self.driver.get(WHISTLER_AVAILABILITY_PAGE)
         self.click_availability_button()

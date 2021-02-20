@@ -2,35 +2,22 @@ import datetime
 import time
 from typing import List
 
-from whistler.scraper import WhistlerScraper
+from whistler.tweeter.secrets import extract_secrets
+from whistler.tweeter.twitterAlerts import TwitterAlerter
+from whistler.whistlerAvailability import find_open_dates, formDateFoundMessage
 
-INTERVAL_MINUTES = 5
-
-
-def find_open_dates(dates_to_check: List[datetime.date]) -> List[datetime.date]:
-    print("Executing scrape")
-    scraper = WhistlerScraper(headless=True)
-    free_dates = []
-    for date in dates_to_check:
-        month_name = date.strftime("%B")
-        if scraper.check_day_is_open(date.day, month_name):
-            free_dates.append(date)
-    if free_dates:
-        print("Found open dates!!! %s" % free_dates)
-    return free_dates
+DEFAULT_INTERVAL_MINUTES = 10
 
 
-def run():
-    dates = [datetime.date(2021, 4, 19), datetime.date(2021, 4, 20)]
-
+def run_schedule(twitter_handle: str, dates: List[datetime.date], minute_interval=DEFAULT_INTERVAL_MINUTES):
+    twitter_alerter = TwitterAlerter(extract_secrets())
     while True:
         free_dates = find_open_dates(dates)
         if free_dates:
-            #TODO: add twitter message or other notification here
-            print("sending notification!")
-            break
-        time.sleep(INTERVAL_MINUTES * 60)
+            msg = formDateFoundMessage(dates)
+            print("sending notification! %s" % msg)
+            twitter_alerter.send_dm(twitter_handle, msg)
+            print("shutting down successfully ")
+            return
+        time.sleep(minute_interval * 60)
 
-
-if __name__ == "__main__":
-    run()
