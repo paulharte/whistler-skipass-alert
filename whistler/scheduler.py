@@ -9,7 +9,11 @@ from whistler.whistlerAvailability import find_open_dates, formDateFoundMessage
 DEFAULT_INTERVAL_MINUTES = 10
 
 
-def run_schedule(twitter_handle: str, dates: List[datetime.date], minute_interval=DEFAULT_INTERVAL_MINUTES):
+def run_schedule(
+    twitter_handle: str,
+    dates: List[datetime.date],
+    minute_interval=DEFAULT_INTERVAL_MINUTES,
+):
     twitter_alerter = TwitterAlerter(extract_secrets())
     while True:
         free_dates = find_open_dates(dates)
@@ -20,4 +24,3 @@ def run_schedule(twitter_handle: str, dates: List[datetime.date], minute_interva
             print("shutting down successfully ")
             return
         time.sleep(minute_interval * 60)
-

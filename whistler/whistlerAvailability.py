@@ -20,8 +20,10 @@ def find_open_dates(dates_to_check: List[datetime.date]) -> List[datetime.date]:
 
 
 def formDateFoundMessage(free_dates: List[datetime.date]) -> str:
-    if len(free_dates) ==1:
-        return "Hey, the following date is free in Whistler: %s" % free_dates[0].strftime("%d-%b")
+    if len(free_dates) == 1:
+        return "Hey, the following date is free in Whistler: %s" % free_dates[
+            0
+        ].strftime("%d-%b")
     else:
-        date_part = ','.join(map(lambda x: x.strftime("%d-%b"), free_dates))
+        date_part = ",".join(map(lambda x: x.strftime("%d-%b"), free_dates))
         return "Hey, the following dates are free in Whistler: %s" % date_part
